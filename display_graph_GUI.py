@@ -1,11 +1,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import math, os, inspect, pylab
+import os
 import tkinter as tk
 from tkinter import *
 import tkinter.ttk as ttk
-from time import sleep
 
 def click_graph(event):
     print('event.button ...' + str(event.button))
