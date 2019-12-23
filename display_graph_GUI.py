@@ -1,11 +1,48 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import os
+import os, inspect
 import tkinter as tk
 from tkinter import *
 import tkinter.ttk as ttk
 
+class ClickGraphActivity:
+    def __init__(self, graph):
+        self.graph = graph
+        self.stat = 0
+        self.x_first = 0
+        self.x_second = 0
+        self.y_first = 0
+        self.y_second = 0
+        self.cid = graph.figure.canvas.mpl_connect('button_press_event', self)
+        
+    def __call__(self, event):
+        print('click', event)
+        if self.stat == 0 and event.button == 1:
+            self.x_first = event.xdata
+            self.y_first = event.ydata
+            self.stat = 1
+            print('event.xdata = ' + str(event.xdata))
+            print('event.x = ' + str(event.x))
+
+        elif self.stat == 1 and event.button == 1:
+            self.x_second = event.xdata
+            self.y_second = event.ydata
+            self.stat = 0
+            if (self.x_second - self.x_first) > 0:
+                self.graph.figure.gca(xlim = [self.x_first, self.x_second])
+            else:
+                self.graph.figure.set_xlim(auto = True)
+            plt.draw()
+            self.x_first = 0
+            self.x_second = 0
+
+        elif event.button == 3:
+            self.stat = 0
+            self.x_first = 0
+            self.x_second = 0
+    
+        
 def click_graph(event):
     print('event.button ...' + str(event.button))
     print('event.xdata  ... ' + str(event.xdata))
@@ -48,12 +85,21 @@ def display_graph_ovarlap():
 
     fig = plt.figure(figsize = [12, 8])
     ax = fig.add_subplot(111)
-    for j in var_y:
-        ax.scatter(df[var_x], df[j], marker = '.')
+    ydata_length = len(var_y)
+    cnt = 0
     ax.set_xlabel(var_x)
     ax.set_ylabel('Scatter')
     ax.legend(var_y)
-    cid = fig.canvas.mpl_connect('button_press_event', click_graph)
+    for j in var_y:
+        cnt += 1
+        if cnt == ydata_length:
+            print('################## test ###################')
+            graph, = ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
+        else :
+            ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
+    # # graph, = ax.plot([0], [0])
+    # graph, = ax.plot(df[var_x], df[var_y[0]], marker = '.')
+    click = ClickGraphActivity(graph)
     plt.show()
 
 def display_graph_separate():
@@ -74,10 +120,15 @@ def display_graph_separate():
         cnt += 1
         num_subplot = ydata_length * 100 + 10 + cnt
         ax = fig.add_subplot(num_subplot)
-        ax.scatter(df[var_x], df[j], marker = '.')
         ax.set_ylabel(j)
+        if cnt == ydata_length:
+            print('test')
+            graph, = ax.plot(df[var_x], df[j], marker = '.', linestyle = None)
+        else :
+            ax.plot(df[var_x], df[j], marker = '.', linestyle = None)
     ax.set_xlabel(var_x)
-    cid = fig.canvas.mpl_connect('button_press_event', click_graph)
+    # graph, = ax.plot([0], [0])
+    click = ClickGraphActivity(graph)
     plt.show()
 
 def insert_lb():
