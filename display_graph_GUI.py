@@ -6,41 +6,63 @@ import tkinter as tk
 from tkinter import *
 import tkinter.ttk as ttk
 
-class ClickGraphActivity:
-    def __init__(self, graph):
-        self.graph = graph
-        self.stat = 0
-        self.x_first = 0
-        self.x_second = 0
-        self.y_first = 0
-        self.y_second = 0
-        self.cid = graph.figure.canvas.mpl_connect('button_press_event', self)
+# class ClickGraphActivity:
+#     def __init__(self, graph):
+#         self.graph = graph
+#         self.graph_origin = graph
+#         self.stat = 0
+#         self.x_first = 0
+#         self.x_second = 0
+#         self.y_first = 0
+#         self.y_second = 0
+#         self.cid = graph.figure.canvas.mpl_connect('button_press_event', self)
         
-    def __call__(self, event):
-        print('click', event)
-        if self.stat == 0 and event.button == 1:
-            self.x_first = event.xdata
-            self.y_first = event.ydata
-            self.stat = 1
-            print('event.xdata = ' + str(event.xdata))
-            print('event.x = ' + str(event.x))
+#     def __call__(self, event):
+#         print('click', event)
+#         if self.stat == 0 and event.button == 1:
+#             self.x_first = event.xdata
+#             self.y_first = event.ydata
+#             self.stat = 1
+#             print('event.xdata = ' + str(event.xdata))
+#             print('event.x = ' + str(event.x))
 
-        elif self.stat == 1 and event.button == 1:
-            self.x_second = event.xdata
-            self.y_second = event.ydata
-            self.stat = 0
-            if (self.x_second - self.x_first) > 0:
-                self.graph.figure.gca(xlim = [self.x_first, self.x_second])
-            else:
-                self.graph.figure.set_xlim(auto = True)
-            plt.draw()
-            self.x_first = 0
-            self.x_second = 0
+#         elif self.stat == 1 and event.button == 1:
+#             self.x_second = event.xdata
+#             self.y_second = event.ydata
+#             self.stat = 0
+#             if (self.x_second - self.x_first) > 0:
+#                 self.graph.figure.delaxes(self.graph.axes)
+                # ax_ = self.graph.figure.add_subplot(111)
+                # ax_.set_xlim(self.x_first, self.x_second)
+                # ax_.set_ylim(self.y_first, self.y_second)
+                # ydata_length = len(self.graph_origin.)
+                # cnt = 0
+                # ax_.set_xlabel(var_x)
+                # ax_.set_ylabel('Scatter')
+                # ax.legend(var_y)
+                # # for j in var_y:
+                # #     cnt += 1
+                # #     if cnt == ydata_length:
+                # #         print('################## test ###################')
+                # #         graph, = ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
+                # #     else :
+                # #         ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
 
-        elif event.button == 3:
-            self.stat = 0
-            self.x_first = 0
-            self.x_second = 0
+
+                
+        #     else:
+        #         self.graph.figure.delaxes(self.graph.axes)
+                
+        #         set_xlim(auto = True)
+                
+        #     plt.draw()
+        #     self.x_first = 0
+        #     self.x_second = 0
+
+        # elif event.button == 3:
+        #     self.stat = 0
+        #     self.x_first = 0
+        #     self.x_second = 0
     
         
 def click_graph(event):
@@ -85,21 +107,24 @@ def display_graph_ovarlap():
 
     fig = plt.figure(figsize = [12, 8])
     ax = fig.add_subplot(111)
-    ydata_length = len(var_y)
-    cnt = 0
+    # for j in var_y:
+        # cnt += 1
+        # ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
+        # if cnt == ydata_length:
+        #     print('################## test ###################')
+        #     graph, = ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
+        # else :
+            # ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
+    # # graph, = ax.plot([0], [0])
+    # graph, = ax.plot(df[var_x], df[var_y[0]], marker = '.')
+    # click = ClickGraphActivity(graph)
+    for j in var_y:
+        ax.plot(df[var_x], df[j], marker = '.', linewidth = int(txt_linew.get()))
     ax.set_xlabel(var_x)
     ax.set_ylabel('Scatter')
     ax.legend(var_y)
-    for j in var_y:
-        cnt += 1
-        if cnt == ydata_length:
-            print('################## test ###################')
-            graph, = ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
-        else :
-            ax.plot(df[var_x], df[j], marker = '.', linewidth = 0)
-    # # graph, = ax.plot([0], [0])
-    # graph, = ax.plot(df[var_x], df[var_y[0]], marker = '.')
-    click = ClickGraphActivity(graph)
+    if bln_grid.get():
+        ax.grid(which = 'both')
     plt.show()
 
 def display_graph_separate():
@@ -121,14 +146,19 @@ def display_graph_separate():
         num_subplot = ydata_length * 100 + 10 + cnt
         ax = fig.add_subplot(num_subplot)
         ax.set_ylabel(j)
-        if cnt == ydata_length:
-            print('test')
-            graph, = ax.plot(df[var_x], df[j], marker = '.', linestyle = None)
-        else :
-            ax.plot(df[var_x], df[j], marker = '.', linestyle = None)
+        # if cnt == ydata_length:
+        #     print('test')
+        #     graph, = ax.plot(df[var_x], df[j], marker = '.', linestyle = None)
+        # else :
+        #     ax.plot(df[var_x], df[j], marker = '.', linestyle = None)
+        ax.plot(df[var_x], df[j], marker = '.', linewidth = int(txt_linew.get()))
+        if bln_grid.get():
+            ax.grid(which = 'both')
     ax.set_xlabel(var_x)
+    # ax.can_pan()
     # graph, = ax.plot([0], [0])
-    click = ClickGraphActivity(graph)
+    # click = ClickGraphActivity(graph)
+
     plt.show()
 
 def insert_lb():
@@ -149,9 +179,34 @@ def insert_lb():
     for j in csv_header:
         lb_x.insert(END, j)
         lb_y.insert(END, j)
+
+def save_all_graph():
+    index = lb.curselection()[0]
+    index_x = lb_x.curselection()[0]
+    filename = lb.get(index)
+    var_x = lb_x.get(index_x)
+    var_y = []        
+    df = pd.read_csv('./logs/' + filename)
+    for i in df:
+        var_y.append(i)
     
+    cnt = 0
+    for j in var_y:
+        cnt += 1
+        fig = plt.figure(figsize = [12, 8])
+        ax = fig.add_subplot(111)
+        ax.plot(df[var_x], df[j], marker = '.', linewidth = int(txt_linew.get()))
+        ax.set_xlabel(var_x)
+        ax.set_ylabel(j)
+        if bln_grid.get():
+            ax.grid(which = 'both')
+        plt.savefig(txt_save_dir.get() + 'save_' + str(cnt) + '.png')
+        fig.delaxes(ax)
+        plt.clf()
+        plt.close()
+
 root = tk.Tk()
-root.geometry('600x550')
+root.geometry('600x700')
 root.title("create graph")
 
 ## CAUTION ##
@@ -177,7 +232,23 @@ lb.configure(selectmode = 'browse')
 # lb.bind('<<ListboxSelect>>', insert_header)
 # scrollbar_csv = ttk.Scrollbar(root, orient = VERTICAL, command = lb.yview)
 
-button = ttk.Button(root, text = 'select csv file', command = insert_lb) 
+button = tk.Button(root, text = 'select csv file', command = insert_lb)
+
+button_save_all = tk.Button(root, text = 'save all graph', command = save_all_graph)
+
+bln_grid = tk.BooleanVar()
+bln_grid.set(True)
+chk_grid = tk.Checkbutton(root, variable = bln_grid, text = 'grid line')
+
+# bln_line = tk.BooleanVar()
+# bln_line.set(False)
+# chk_line = tk.Checkbutton(root, variable = bln_line, text = 'line')
+
+txt_linew = tk.Entry(width = 10)
+txt_linew.insert(tk.END, '0')
+
+txt_save_dir = tk.Entry(width = 20)
+txt_save_dir.insert(tk.END, './test/')
 
 lb_x.grid(column = 1, row = 2, pady = 10, padx = 10)
 lb_y.grid(column = 2, row = 2, pady = 10, padx = 10)
@@ -186,5 +257,9 @@ button_graph_separate.grid(column = 3, row = 3, pady = 10, padx = 10)
 
 lb.grid(column = 1, row = 1)
 button.grid(column = 2, row = 1)
+chk_grid.grid(column = 2, row = 3, pady = 10, padx = 10)
+txt_linew.grid(column = 1, row = 3, pady = 10, padx = 10)
+button_save_all.grid(column = 3, row = 4, pady = 10, padx = 10)
+txt_save_dir.grid(column = 1, row = 4, pady = 10, padx = 10)
 
 root.mainloop()
