@@ -6,6 +6,11 @@ import tkinter as tk
 from tkinter import *
 import tkinter.ttk as ttk
 
+######################################################################
+## if you want to change CSV file path, please change this variable ##
+######################################################################
+data_path = './logs/'
+
 # class ClickGraphActivity:
 #     def __init__(self, graph):
 #         self.graph = graph
@@ -103,7 +108,7 @@ def display_graph_ovarlap():
     for i in index_y:
         var_y.append(lb_y.get(i))
         
-    df = pd.read_csv('./logs/' + filename, usecols = [var_x] + var_y)
+    df = pd.read_csv(data_path + filename, usecols = [var_x] + var_y)
 
     fig = plt.figure(figsize = [12, 8])
     ax = fig.add_subplot(111)
@@ -125,6 +130,12 @@ def display_graph_ovarlap():
     ax.legend(var_y)
     if bln_grid.get():
         ax.grid(which = 'both')
+    if bln_logx.get():
+        ax.set_xscale('log')
+    if bln_logy.get():
+        ax.set_yscale('log')
+
+    cid = fig.canvas.mpl_connect('button_press_event', click_graph)
     plt.show()
 
 def display_graph_separate():
@@ -137,7 +148,7 @@ def display_graph_separate():
     for i in index_y:
         var_y.append(lb_y.get(i))
         
-    df = pd.read_csv('./logs/' + filename, usecols = [var_x] + var_y)
+    df = pd.read_csv(data_path + filename, usecols = [var_x] + var_y)
     fig = plt.figure(figsize = [12, 8])
     cnt = 0
     ydata_length = len(var_y)
@@ -154,17 +165,21 @@ def display_graph_separate():
         ax.plot(df[var_x], df[j], marker = '.', linewidth = int(txt_linew.get()))
         if bln_grid.get():
             ax.grid(which = 'both')
+        if bln_logx.get():
+            ax.set_xscale('log')
+        if bln_logy.get():
+            ax.set_yscale('log')
     ax.set_xlabel(var_x)
     # ax.can_pan()
     # graph, = ax.plot([0], [0])
     # click = ClickGraphActivity(graph)
-
+    cid = fig.canvas.mpl_connect('button_press_event', click_graph)
     plt.show()
 
 def insert_lb():
     index = lb.curselection()[0]
     csv_filename = lb.get(index)
-    df = pd.read_csv('./logs/' + csv_filename)
+    df = pd.read_csv(data_path + csv_filename)
     csv_header = []
     for i in df:
         csv_header.append(i)
@@ -186,7 +201,7 @@ def save_all_graph():
     filename = lb.get(index)
     var_x = lb_x.get(index_x)
     var_y = []        
-    df = pd.read_csv('./logs/' + filename)
+    df = pd.read_csv(data_path + filename)
     for i in df:
         var_y.append(i)
     
@@ -200,6 +215,10 @@ def save_all_graph():
         ax.set_ylabel(j)
         if bln_grid.get():
             ax.grid(which = 'both')
+        if bln_logx.get():
+            ax.set_xscale('log')
+        if bln_logy.get():
+            ax.set_yscale('log')
         plt.savefig(txt_save_dir.get() + 'save_' + str(cnt) + '.png')
         fig.delaxes(ax)
         plt.clf()
@@ -240,6 +259,14 @@ bln_grid = tk.BooleanVar()
 bln_grid.set(True)
 chk_grid = tk.Checkbutton(root, variable = bln_grid, text = 'grid line')
 
+bln_logx = tk.BooleanVar()
+bln_logx.set(False)
+chk_logx = tk.Checkbutton(root, variable = bln_logx, text = 'x log')
+
+bln_logy = tk.BooleanVar()
+bln_logy.set(False)
+chk_logy = tk.Checkbutton(root, variable = bln_logy, text = 'y log')
+
 # bln_line = tk.BooleanVar()
 # bln_line.set(False)
 # chk_line = tk.Checkbutton(root, variable = bln_line, text = 'line')
@@ -253,13 +280,15 @@ txt_save_dir.insert(tk.END, './test/')
 lb_x.grid(column = 1, row = 2, pady = 10, padx = 10)
 lb_y.grid(column = 2, row = 2, pady = 10, padx = 10)
 button_graph_overlap.grid(column = 3, row = 2, padx = 10)
-button_graph_separate.grid(column = 3, row = 3, pady = 10, padx = 10)
 
 lb.grid(column = 1, row = 1)
 button.grid(column = 2, row = 1)
-chk_grid.grid(column = 2, row = 3, pady = 10, padx = 10)
-txt_linew.grid(column = 1, row = 3, pady = 10, padx = 10)
-button_save_all.grid(column = 3, row = 4, pady = 10, padx = 10)
-txt_save_dir.grid(column = 1, row = 4, pady = 10, padx = 10)
+chk_logx.grid(column = 1, row = 3)
+chk_logy.grid(column = 2, row = 3)
+txt_linew.grid(column = 1, row = 4, pady = 10, padx = 10)
+chk_grid.grid(column = 2, row = 4, pady = 10, padx = 10)
+button_graph_separate.grid(column = 3, row = 4, pady = 10, padx = 10)
+button_save_all.grid(column = 3, row = 5, pady = 10, padx = 10)
+txt_save_dir.grid(column = 1, row = 5, pady = 10, padx = 10)
 
 root.mainloop()
