@@ -9,7 +9,6 @@ import tkinter.ttk as ttk
 ######################################################################
 ## if you want to change CSV file path, please change this variable ##
 ######################################################################
-# data_path = '//smb.cie/raid1/usr/kurose/satellite/programs/satsim/logs/'
 data_path = './logs/'
 
 def display_graph_ovarlap():
