@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import os, inspect
 import tkinter as tk
@@ -126,15 +125,15 @@ root.title("create graph")
 ## CAUTION ##
 ## when you make listbox, you SHOULD assign different variable to listvariable
 ## the function keyword refer to memory place
-lb_x = tk.Listbox(root, listvariable = StringVar(), width = 28, height = 15, exportselection = 0)
+lb_x = tk.Listbox(root, listvariable = tk.StringVar(), width = 28, height = 15, exportselection = 0)
 lb_x.configure(selectmode = 'browse')
 
-lb_y = tk.Listbox(root, listvariable = StringVar(), width = 28, height = 15, exportselection = 0)
+lb_y = tk.Listbox(root, listvariable = tk.StringVar(), width = 28, height = 15, exportselection = 0)
 lb_y.configure(selectmode = 'extended')
 
-button_graph_overlap = Button(root, text = 'create graph overlap', command = display_graph_ovarlap) ## plot scatter overlap
+button_graph_overlap = tk.Button(root, text = 'create graph overlap', command = display_graph_ovarlap) ## plot scatter overlap
 
-button_graph_separate = Button(root, text = 'create graph separately', command = display_graph_separate) ## plot scatter line up vertival axis
+button_graph_separate = tk.Button(root, text = 'create graph separately', command = display_graph_separate) ## plot scatter line up vertival axis
 
 listarray = os.listdir('./logs/')
 txt = tk.StringVar(value = listarray)
