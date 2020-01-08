@@ -2,7 +2,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os, inspect
 import tkinter as tk
-from tkinter import *
 import tkinter.ttk as ttk
 
 ######################################################################
